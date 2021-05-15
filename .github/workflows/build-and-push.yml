@@ -1,0 +1,58 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - 'master'
+
+env:
+  IMAGE_NAME: figedi/themerger
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Setup GitHub user
+        run: |
+          git config --local user.email "github-actions@users.noreply.github.com"
+          git config --local user.name "GitHub Actions"
+
+      - name: Generate version commit
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          npm ci
+          npm run release
+          VERSION=$(cat package.json | jq -r '.version')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Build and push docker image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:latest
+          cache-to: type=inline
+          tags: ${{ env.IMAGE_NAME }}:${{ env.VERSION }},${{ env.IMAGE_NAME }}:latest
+
+      - name: Push tags from version bump
+        run: |
+          git commit -am "chore: applying package updates [skip ci]"
+          git pull --rebase origin master
+          git push --follow-tags origin master
+
+      - name: Undo pushes on failure
+        if: failure()
+        run: |
+          git push origin :refs/tags/v${{ env.VERSION }}
