@@ -6,7 +6,7 @@ on:
       - 'master'
 
 env:
-  IMAGE_NAME: figedi/coffeescrape
+  IMAGE_NAME: gcr.io/private-figedi/coffeescrape
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
@@ -52,8 +52,8 @@ jobs:
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:latest
           cache-to: type=inline
           tags: |
-            gcr.io/private-figedi/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
-            gcr.io/private-figedi/${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+            ${{ env.IMAGE_NAME }}:latest
 
       - name: Push tags from version bump
         run: |
