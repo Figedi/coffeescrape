@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+# rxjs is one of the largest bundles, yet the files we require are just cjs (found in ./internal)
+rm -rf ./node_modules/rxjs/src/
+rm -rf ./node_modules/rxjs/bundles/
+rm -rf ./node_modules/rxjs/_esm5/
+rm -rf ./node_modules/rxjs/_esm2015/
+
+# clean all d.ts files, they are never needed in prod
+rm -rf ./node_modules/**/*.{png,jpg,gif} || true
+rm -rf ./node_modules/**/*.d.ts || true
+rm -rf ./node_modules/**/*.js.map || true
