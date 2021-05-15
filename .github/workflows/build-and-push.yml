@@ -6,7 +6,7 @@ on:
       - 'master'
 
 env:
-  IMAGE_NAME: figedi/themerger
+  IMAGE_NAME: figedi/coffeescrape
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
