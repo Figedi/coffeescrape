@@ -33,6 +33,10 @@ jobs:
           VERSION=$(cat package.json | jq -r '.version')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+      - name: Configure docker 
+        run: |
+          gcloud auth configure-docker
+
       - name: Build and push docker image
         id: docker_build
         uses: docker/build-push-action@v2
