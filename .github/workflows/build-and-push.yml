@@ -51,7 +51,7 @@ jobs:
 
       - name: Push tags from version bump
         run: |
-          git commit -am "chore: applying package updates [skip ci]"
+          git commit -am "chore: applying package updates [skip ci]" || true
           git pull --rebase origin master
           git push --follow-tags origin master
 
