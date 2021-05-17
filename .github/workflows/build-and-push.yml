@@ -23,6 +23,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@master
         with:
           service_account_key: ${{ secrets.GCR_JSON_KEY }}
+          export_default_credentials: true
 
       - name: Generate version commit
         env:
@@ -53,6 +54,14 @@ jobs:
           git commit -am "chore: applying package updates [skip ci]"
           git pull --rebase origin master
           git push --follow-tags origin master
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@main
+        with:
+          image: ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          service: coffeescrape
+          region: eu-west1
+          env_vars: NODE_ENV="production", TELEGRAM_TOKEN="${{ secrets.APP_TELEGRAM_TOKEN }}", TELEGRAM_DEFAULT_USER_ID="${{ secrets.APP_TELEGRAM_DEFAULT_USER_ID }}", DB_URI="${{ secrets.APP_DB_URI }}", DB_NAME="${{ secrets.APP_DB_NAME }}", DB_COLLECTION="${{ secrets.APP_DB_COLLECTION }}", AUTH_USER="${{ secrets.APP_AUTH_USER }}", AUTH_PASS="${{ secrets.APP_AUTH_PASS }}"
 
       - name: Undo pushes on failure
         if: failure()
