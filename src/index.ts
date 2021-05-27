@@ -14,6 +14,7 @@ import { ScraperStore } from "./stores/scraperStore";
 import { CoffeeScraperService } from "./services/CoffeeScraperService";
 import { patchCollectionSchema, postCollectionSchema } from "./lib/base/schemas";
 import { Kaffee24Scraper } from "./scrapers/kaffee24";
+import { DiecremaScraper } from "./scrapers/diecrema";
 
 /**
  * @todo price comparsion api for comparsion of current price
@@ -61,6 +62,7 @@ ApplicationBuilder.create()
     new MobaScraper(),
     new MccScraper(),
     new Kaffee24Scraper(),
+    new DiecremaScraper(),
   ])
   .registerDependency("routes", ({ resolve }) => [
     ...createScraperRoutes(resolve<CoffeeScraperService>("coffeeScraperService")),
