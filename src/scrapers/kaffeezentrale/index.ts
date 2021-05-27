@@ -14,23 +14,21 @@ export class KaffeeZentraleScraper implements IScraper {
 
     const rawProducts = cheerio(".listing", data).children().toArray();
 
-    const parsed = await Promise.all(
-      rawProducts.map(async prodItem => {
-        const url = cheerio(".overall-link", prodItem).attr("href");
-        const imageUrl = cheerio(".product--info picture > img", prodItem).attr("data-srcset")?.split(",")?.[0];
-        const title = cheerio(".product--info .product--title", prodItem).html()?.trim();
-        const description = cheerio(".product--info .teaser-text:last", prodItem).html()!;
-        const price = cheerio(".product--info .product--price > .price--default", prodItem).text();
+    const parsed = rawProducts.map(prodItem => {
+      const url = cheerio(".overall-link", prodItem).attr("href");
+      const imageUrl = cheerio(".product--info picture > img", prodItem).attr("data-srcset")?.split(",")?.[0];
+      const title = cheerio(".product--info .product--title", prodItem).html()?.trim();
+      const description = cheerio(".product--info .teaser-text:last", prodItem).html()!;
+      const price = cheerio(".product--info .product--price > .price--default", prodItem).text();
 
-        return {
-          url,
-          imageUrl,
-          title,
-          description,
-          price: parseFloat(price),
-        };
-      }),
-    );
+      return {
+        url,
+        imageUrl,
+        title,
+        description,
+        price: parseFloat(price),
+      };
+    });
 
     return {
       providerName: this.name,

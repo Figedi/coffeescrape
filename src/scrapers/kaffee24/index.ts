@@ -2,22 +2,22 @@ import axios from "axios";
 import cheerio from "cheerio";
 import { IScraper, ScrapeStatus } from "../../lib/base/types";
 
-export class MccScraper implements IScraper {
-  public name = "Mcc";
+export class Kaffee24Scraper implements IScraper {
+  public name = "Kaffee24";
 
-  private baseUrl = "https://www.mcc.ag";
+  private baseUrl = "https://www.kaffee24.de";
 
-  private secondGradeUrl = `${this.baseUrl}/angebote/b-ware/?p=1&o=3&n=30&f=147%7C148`;
+  private secondGradeUrl = `${this.baseUrl}/b-ware/?p=1&o=5&n=96`;
 
   public async scrape() {
     const { data } = await axios.get(this.secondGradeUrl);
 
-    const rawProducts = cheerio(".product--box", data).toArray();
+    const rawProducts = cheerio(".product--box", data).children().toArray();
 
     const parsed = rawProducts.map(prodItem => {
-      const imageUrl = cheerio(".product--image img", prodItem).attr("srcset");
-      const url = cheerio(".product--title", prodItem).attr("href");
-      const title = cheerio(".product--title", prodItem).html()?.trim();
+      const url = cheerio(".product--info > a", prodItem).attr("href");
+      const imageUrl = cheerio(".image--media > img", prodItem).attr("srcset")?.split(",")?.[0];
+      const title = cheerio(".product--info > a", prodItem).attr("title")?.trim();
       const price = cheerio(".product--price > .price--default", prodItem).text();
 
       return {

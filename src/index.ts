@@ -13,6 +13,7 @@ import { IPublisher, IScraper } from "./lib/base/types";
 import { ScraperStore } from "./stores/scraperStore";
 import { CoffeeScraperService } from "./services/CoffeeScraperService";
 import { patchCollectionSchema, postCollectionSchema } from "./lib/base/schemas";
+import { Kaffee24Scraper } from "./scrapers/kaffee24";
 
 /**
  * @todo price comparsion api for comparsion of current price
@@ -59,6 +60,7 @@ ApplicationBuilder.create()
     new EspressoPerfettoScraper(),
     new MobaScraper(),
     new MccScraper(),
+    new Kaffee24Scraper(),
   ])
   .registerDependency("routes", ({ resolve }) => [
     ...createScraperRoutes(resolve<CoffeeScraperService>("coffeeScraperService")),

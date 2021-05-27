@@ -19,21 +19,19 @@ export class MobaScraper implements IScraper {
 
     const rawProducts = cheerio(".product-wrapper", data).toArray();
 
-    return Promise.all(
-      rawProducts.map(async prodItem => {
-        const url = cheerio(".image-wrapper", prodItem).attr("href");
-        const imageUrl = cheerio(".image-wrapper .image-content img", prodItem).attr("data-src");
-        const title = cheerio(".caption .title > a", prodItem).html()!;
-        const price = cheerio(".price_wrapper > .price > span:first", prodItem).text();
+    return rawProducts.map(prodItem => {
+      const url = cheerio(".image-wrapper", prodItem).attr("href");
+      const imageUrl = cheerio(".image-wrapper .image-content img", prodItem).attr("data-src");
+      const title = cheerio(".caption .title > a", prodItem).html()!;
+      const price = cheerio(".price_wrapper > .price > span:first", prodItem).text();
 
-        return {
-          url: `${this.baseUrl}/${url}`,
-          imageUrl: `${this.baseUrl}/${imageUrl}`,
-          title,
-          price: parseFloat(price),
-        };
-      }),
-    );
+      return {
+        url: `${this.baseUrl}/${url}`,
+        imageUrl: `${this.baseUrl}/${imageUrl}`,
+        title,
+        price: parseFloat(price),
+      };
+    });
   }
 
   private async scrapeAusstellungsStücke() {
@@ -41,21 +39,19 @@ export class MobaScraper implements IScraper {
 
     const rawProducts = cheerio(".product-wrapper", data).toArray();
 
-    return Promise.all(
-      rawProducts.map(async prodItem => {
-        const url = cheerio(".image-wrapper", prodItem).attr("href");
-        const imageUrl = cheerio(".image-wrapper .image-content img", prodItem).attr("data-src");
-        const title = cheerio(".caption .title > a", prodItem).html()!;
-        const price = cheerio(".price_wrapper > .price > span:first", prodItem).text();
+    return rawProducts.map(prodItem => {
+      const url = cheerio(".image-wrapper", prodItem).attr("href");
+      const imageUrl = cheerio(".image-wrapper .image-content img", prodItem).attr("data-src");
+      const title = cheerio(".caption .title > a", prodItem).html()!;
+      const price = cheerio(".price_wrapper > .price > span:first", prodItem).text();
 
-        return {
-          url: `${this.baseUrl}/${url}`,
-          imageUrl: `${this.baseUrl}/${imageUrl}`,
-          title,
-          price: parseFloat(price),
-        };
-      }),
-    );
+      return {
+        url: `${this.baseUrl}/${url}`,
+        imageUrl: `${this.baseUrl}/${imageUrl}`,
+        title,
+        price: parseFloat(price),
+      };
+    });
   }
 
   private async scrapeSale() {
@@ -63,19 +59,17 @@ export class MobaScraper implements IScraper {
 
     const rawProducts = cheerio(".product-wrapper", data).toArray();
 
-    return Promise.all(
-      rawProducts.map(async prodItem => {
-        const imageUrl = cheerio(".image-wrapper .image-content img", prodItem).attr("data-src");
-        const title = cheerio(".caption .title > a", prodItem).html()!;
-        const price = cheerio(".price_wrapper > .price > span:first", prodItem).text();
+    return rawProducts.map(prodItem => {
+      const imageUrl = cheerio(".image-wrapper .image-content img", prodItem).attr("data-src");
+      const title = cheerio(".caption .title > a", prodItem).html()!;
+      const price = cheerio(".price_wrapper > .price > span:first", prodItem).text();
 
-        return {
-          imageUrl: `${this.baseUrl}/${imageUrl}`,
-          title,
-          price: parseFloat(price),
-        };
-      }),
-    );
+      return {
+        imageUrl: `${this.baseUrl}/${imageUrl}`,
+        title,
+        price: parseFloat(price),
+      };
+    });
   }
 
   public async scrape() {

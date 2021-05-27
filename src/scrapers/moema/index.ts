@@ -15,21 +15,19 @@ export class MoemaScraper implements IScraper {
 
     const rawProducts = cheerio(".products-grid", data).children().toArray();
 
-    const parsed = await Promise.all(
-      rawProducts.map(async prodItem => {
-        const url = cheerio("a.actions", prodItem).attr("href");
-        const imageUrl = cheerio("img", prodItem).attr("src");
-        const title = cheerio(".product-name > a", prodItem).html()!;
-        const price = cheerio(".price-box .price", prodItem).text();
+    const parsed = rawProducts.map(prodItem => {
+      const url = cheerio("a.actions", prodItem).attr("href");
+      const imageUrl = cheerio("img", prodItem).attr("src");
+      const title = cheerio(".product-name > a", prodItem).html()!;
+      const price = cheerio(".price-box .price", prodItem).text();
 
-        return {
-          url,
-          imageUrl,
-          title,
-          price: parseFloat(price),
-        };
-      }),
-    );
+      return {
+        url,
+        imageUrl,
+        title,
+        price: parseFloat(price),
+      };
+    });
 
     return {
       providerName: this.name,

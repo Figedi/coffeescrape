@@ -17,24 +17,22 @@ export class EspressoPerfettoScraper implements IScraper {
 
     const rawProducts = cheerio(".product-wrapper", data).toArray();
 
-    return Promise.all(
-      rawProducts.map(async prodItem => {
-        let url = cheerio(".image-wrapper", prodItem).attr("href");
-        if (!url) {
-          url = cheerio(".title > a", prodItem).attr("href");
-        }
-        const imageUrl = cheerio(".image-wrapper img", prodItem).attr("data-src");
-        const title = cheerio(".caption .title a", prodItem).html()!;
-        const price = cheerio(".price_wrapper .price > span:first", prodItem).text();
+    return rawProducts.map(prodItem => {
+      let url = cheerio(".image-wrapper", prodItem).attr("href");
+      if (!url) {
+        url = cheerio(".title > a", prodItem).attr("href");
+      }
+      const imageUrl = cheerio(".image-wrapper img", prodItem).attr("data-src");
+      const title = cheerio(".caption .title a", prodItem).html()!;
+      const price = cheerio(".price_wrapper .price > span:first", prodItem).text();
 
-        return {
-          url: url?.startsWith(this.baseUrl) ? url : `${this.baseUrl}/${url}`,
-          imageUrl: `${this.baseUrl}/${imageUrl}`,
-          title,
-          price: parseFloat(price),
-        };
-      }),
-    );
+      return {
+        url: url?.startsWith(this.baseUrl) ? url : `${this.baseUrl}/${url}`,
+        imageUrl: `${this.baseUrl}/${imageUrl}`,
+        title,
+        price: parseFloat(price),
+      };
+    });
   }
 
   private async scrapeAusverkauf() {
@@ -42,24 +40,22 @@ export class EspressoPerfettoScraper implements IScraper {
 
     const rawProducts = cheerio(".product-wrapper", data).toArray();
 
-    return Promise.all(
-      rawProducts.map(async prodItem => {
-        let url = cheerio(".image-wrapper", prodItem).attr("href");
-        if (!url) {
-          url = cheerio(".title > a", prodItem).attr("href");
-        }
-        const imageUrl = cheerio(".image-wrapper img", prodItem).attr("data-src");
-        const title = cheerio(".caption .title a", prodItem).html()!;
-        const price = cheerio(".price_wrapper .price > span:first", prodItem).text();
+    return rawProducts.map(prodItem => {
+      let url = cheerio(".image-wrapper", prodItem).attr("href");
+      if (!url) {
+        url = cheerio(".title > a", prodItem).attr("href");
+      }
+      const imageUrl = cheerio(".image-wrapper img", prodItem).attr("data-src");
+      const title = cheerio(".caption .title a", prodItem).html()!;
+      const price = cheerio(".price_wrapper .price > span:first", prodItem).text();
 
-        return {
-          url: url?.startsWith(this.baseUrl) ? url : `${this.baseUrl}/${url}`,
-          imageUrl: `${this.baseUrl}/${imageUrl}`,
-          title,
-          price: parseFloat(price),
-        };
-      }),
-    );
+      return {
+        url: url?.startsWith(this.baseUrl) ? url : `${this.baseUrl}/${url}`,
+        imageUrl: `${this.baseUrl}/${imageUrl}`,
+        title,
+        price: parseFloat(price),
+      };
+    });
   }
 
   public async scrape() {
