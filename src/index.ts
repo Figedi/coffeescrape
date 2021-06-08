@@ -17,6 +17,7 @@ import { Kaffee24Scraper } from "./scrapers/kaffee24";
 import { DiecremaScraper } from "./scrapers/diecrema";
 import { KaffeetechnikShopScraper } from "./scrapers/kaffeetechnik-shop";
 import { StollEspressoScraper } from "./scrapers/stollespresso";
+import { BarestaScraper } from "./scrapers/baresta";
 
 /**
  * @todo price comparsion api for comparsion of current price
@@ -67,6 +68,7 @@ ApplicationBuilder.create()
     new DiecremaScraper(),
     new KaffeetechnikShopScraper(),
     new StollEspressoScraper(),
+    new BarestaScraper(),
   ])
   .registerDependency("routes", ({ resolve }) => [
     ...createScraperRoutes(resolve<CoffeeScraperService>("coffeeScraperService")),
